@@ -4,7 +4,7 @@ import (
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
 	"go_Iris/common"
-	"go_Iris/dapmodels"
+	"go_Iris/datamodels"
 	"go_Iris/services"
 	"strconv"
 )
@@ -14,19 +14,29 @@ type ProductController struct {
 	ProductService services.IProductService
 }
 
-func (p *ProductController) GetAll() mvc.View {
-	productArray, _ := p.ProductService.GetAllProduct()
+func (p *ProductController) GetAll() mvc.Result {
+	//productArray, _ := p.ProductService.GetAllProduct()
+	//return mvc.View{
+	//	Name:   "product/view.html",
+	//	Layout: "shared/layout.html",
+	//	Data: iris.Map{
+	//		"productArray": productArray,
+	//	},
+	//}
+	data := map[string]interface{}{
+		"Title":   "Iris MVC Layout Example",
+		"Content": "<h1>Hello, world!</h1>",
+	}
 	return mvc.View{
-		Name: "product/view.html",
-		Data: iris.Map{
-			"productArray": productArray,
-		},
+		Name:   "product/view.html",
+		Layout: "views/layout.html",
+		Data:   data,
 	}
 }
 
 // 修改商品
 func (p *ProductController) PostUpdate() {
-	product := &dapmodels.Product{}
+	product := &datamodels.Product{}
 	p.Ctx.Request().ParseForm()
 	dec := common.NewDecoder(&common.DecoderOptions{TagName: "imooc"})
 	if err := dec.Decode(p.Ctx.Request().Form, product); err != nil {
@@ -46,7 +56,7 @@ func (p *ProductController) GetAdd() mvc.View {
 }
 
 func (p *ProductController) PostAdd() {
-	product := &dapmodels.Product{}
+	product := &datamodels.Product{}
 	p.Ctx.Request().ParseForm()
 	dec := common.NewDecoder(&common.DecoderOptions{TagName: "imooc"})
 	if err := dec.Decode(p.Ctx.Request().Form, product); err != nil {

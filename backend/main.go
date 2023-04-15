@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
-	"github.com/kataras/iris"
-	"github.com/kataras/iris/mvc"
+	"github.com/kataras/iris/v12"
+	"github.com/kataras/iris/v12/mvc"
 	"go_Iris/backend/web/controllers"
 	"go_Iris/common"
 	"go_Iris/repositories"
@@ -47,6 +47,9 @@ func main() {
 	product := mvc.New(productParty)
 	product.Register(ctx, productSerivce)
 	product.Handle(new(controllers.ProductController))
+	mvc.Configure(app.Party("/product"), func(m *mvc.Application) {
+		m.Handle(new(controllers.ProductController))
+	})
 
 	//6.启动服务
 	app.Run(

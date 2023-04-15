@@ -3,7 +3,7 @@ package repositories
 import (
 	"database/sql"
 	"go_Iris/common"
-	"go_Iris/dapmodels"
+	"go_Iris/datamodels"
 	"strconv"
 )
 
@@ -14,11 +14,11 @@ type IProduct interface {
 	// 数据库连接
 	Conn() error
 	// 增删查改
-	Insert(*dapmodels.Product) (int64, error)
+	Insert(*datamodels.Product) (int64, error)
 	Delete(int64) bool
-	Update(*dapmodels.Product) error
-	SelectById(int64) (*dapmodels.Product, error)
-	SelectAll() ([]*dapmodels.Product, error)
+	Update(*datamodels.Product) error
+	SelectById(int64) (*datamodels.Product, error)
+	SelectAll() ([]*datamodels.Product, error)
 }
 
 type ProductManager struct {
@@ -36,11 +36,11 @@ func NewProductManager(table string, db *sql.DB) IProduct {
 /*
 Conn() error
 	// 增删查改
-	Insert(*dapmodels.Product) (int, error)
+	Insert(*datamodels.Product) (int, error)
 	Delete(int64) bool
-	Update(*dapmodels.Product) error
-	SelectById(int64) (*dapmodels.Product, error)
-	SecectAll() ([]*dapmodels.Product, error)
+	Update(*datamodels.Product) error
+	SelectById(int64) (*datamodels.Product, error)
+	SecectAll() ([]*datamodels.Product, error)
 */
 // 数据库连接
 func (p *ProductManager) Conn() (err error) {
@@ -58,7 +58,7 @@ func (p *ProductManager) Conn() (err error) {
 }
 
 // 新增商品
-func (p *ProductManager) Insert(product *dapmodels.Product) (id int64, err error) {
+func (p *ProductManager) Insert(product *datamodels.Product) (id int64, err error) {
 	// 1.判断连接是否存在
 	if err = p.Conn(); err != nil {
 		return
@@ -100,7 +100,7 @@ func (p *ProductManager) Delete(ProductId int64) bool {
 }
 
 // 修改商品
-func (p *ProductManager) Update(product *dapmodels.Product) (err error) {
+func (p *ProductManager) Update(product *datamodels.Product) (err error) {
 	// 1.判断连接是否存在
 	if err = p.Conn(); err != nil {
 		return err
@@ -120,7 +120,7 @@ func (p *ProductManager) Update(product *dapmodels.Product) (err error) {
 }
 
 // 根据商品ID查询商品
-func (p *ProductManager) SelectById(ProductID int64) (productResult *dapmodels.Product, err error) {
+func (p *ProductManager) SelectById(ProductID int64) (productResult *datamodels.Product, err error) {
 	// 1.判断连接是否存在
 	if err = p.Conn(); err != nil {
 		return nil, err
@@ -140,16 +140,16 @@ func (p *ProductManager) SelectById(ProductID int64) (productResult *dapmodels.P
 
 	result := common.GetResultRow(row)
 	if len(result) == 0 {
-		return &dapmodels.Product{}, nil
+		return &datamodels.Product{}, nil
 	}
-	productResult = &dapmodels.Product{}
+	productResult = &datamodels.Product{}
 	common.DataToStructByTagSql(result, productResult)
 	return
 }
 
 // 查询所有商品
 
-func (p *ProductManager) SelectAll() (Productslice []*dapmodels.Product, err error) {
+func (p *ProductManager) SelectAll() (Productslice []*datamodels.Product, err error) {
 	// 1.判断连接是否存在
 	if err = p.Conn(); err != nil {
 		return nil, err
@@ -168,7 +168,7 @@ func (p *ProductManager) SelectAll() (Productslice []*dapmodels.Product, err err
 	}
 
 	for _, v := range result {
-		product := &dapmodels.Product{}
+		product := &datamodels.Product{}
 		common.DataToStructByTagSql(v, product)
 		Productslice = append(Productslice, product)
 	}
